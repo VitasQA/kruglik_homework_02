@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+    outputs.upToDateWhen { false }
+}
+
+tasks.register('runAllTests') {
+    dependsOn test
+    group = 'verification'
+    description = 'Runs all tests in the project'
+}
+
+tasks.register('afterTest') {
+    doLast {
+        println 'Test run is over'
+    }
+}
+
+test.finalizedBy(afterTest)
